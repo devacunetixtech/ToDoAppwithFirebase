@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap-5.2.1-dist/css/bootstrap.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+        #cardImg{
+            border-radius: 50%;
+        }
+        #home{
+            position: absolute;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="userDashboard"></div>
+    <button class="btn" id="logOut" onclick="signout()">Log Out</button>
+    <!-- <script>
+        var registerLog = []
+        if (localStorage.userlog) {
+            registerLog = JSON.parse(localStorage.getItem("userlog"))
+        } else {
+            registerLog = []
+        }
+        for (var index = 0; index < registerLog.length; index++) {
+            userDashboard.innerHTML = `
+            <span><button onclick="goHome()" class="btn btn-danger" id="home" style="position:fixed;">HOME</button></span>    
+                <h3 class="text-uppercase">Hello ${registerLog[index].userName}</h3>
+                
+            <div class=" m-auto col-10 col-md-4 col-lg-4 mb-5">
+                <img id="cardImg" src="acunetix.jpg" class="card-img-top m-auto my-3 w-100">
+                <div class="card-body">
+                    <div class="border border-success">
+                        <h6 class="card-text text-center">USER DETAILS</h6>
+                        <p><b>USER MAIL : </b>${registerLog[index].userMail}</p>
+                        <p><b>PHONE NUMBER : </b>${registerLog[index].userPhoneNumber}</p>
+                        <p><b>Acct DATE & TIME CREATION  : </b>${Date()}</p>
+                        <button onclick="updateDetails()" class="btn btn-warning">UPDATE</button>
+                        <button onclick="delAccount()" class="btn btn-danger">DELETE ACCOUNT</button>
+                    </div>
+                </div>    
+            </div>
+            `
+            function goHome(){
+                var verify = confirm("You will be directed back home?")
+                if (verify) {
+                    window.location="localTodoPro.html"
+                }
+            }
+        }
+    </script> -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxovPDBU7LtqyDTKnpaJGrEH1w4l97n0g",
+          authDomain: "firbase-class-55f7d.firebaseapp.com",
+          projectId: "firbase-class-55f7d",
+          storageBucket: "firbase-class-55f7d.appspot.com",
+          messagingSenderId: "753705363549",
+          appId: "1:753705363549:web:38a451763b08acf39545b4"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        
+        function signout() {
+            signOut(auth).then(()=>{
+                window.location="index.html";
+            }).catch(()=>{
+                alert("an erroe occurred");
+            })
+        }
+        window.signout = signout;
+    </script>
+
+</body>
+</html>

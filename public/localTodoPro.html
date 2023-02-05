@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Real</title>
+    <link rel="stylesheet" href="/bootstrap-5.2.1-dist/css/bootstrap.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+        #styleIt{
+            font: 25px Roboto,sans-serif;
+        }
+    </style>
+</head>
+    <body style="background-color:darkcyan;">
+        <marquee behavior="" direction="left" style="font: 25px Roboto,sans-serif;"><b>Welcome to my Todo Web App.........</b></marquee>
+        <marquee behavior="" direction="right">Hello User..You can add,edit and delete items from your created list</marquee>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-10 mx-auto">
+                    <input type="text" id="todoName" class="form-control" placeholder="Enter Todo and Add to create a list ....">
+                    <input type="text" id="todoDescribe" class="form-control" placeholder="Enter Todo description ....">
+                    <input type="text" id="todoCategory" class="form-control" placeholder="Enter the category ....">
+                    <input type="file" id="fileInp" class="form-control">
+                    <div id="uploading" class="display-4 text-center"></div>
+                    <div style="display: flex;">
+                        <button onclick="addTodo()" class="btn btn-success py-2 w-50 my-2 me-3">Add ToDo</button>
+                        <!-- <button onclick="deleteAllTodo()" class="btn btn-danger py-2 w-50 my-2">Delete All</button> -->
+                    </div>
+                </div>
+            </div>
+            <div id="disp"></div>
+        </div>
+        <div id="updateDiv" style="display: none;">
+            <input type="text" placeholder="Enter Todo and update the list" id="input1">
+            <input type="text" placeholder="Enter updated category ...." id="input2">
+            <input type="text" placeholder="Enter updated Todo description ...." id="input3">
+            <button onclick="updateList()" class="btn btn-warning">Update ToDo List</button>
+        </div>
+        <button onclick="checkProfile()" style="position: absolute;top: 0;right: 0;" class="btn btn-primary mb-4 me-3 px-3">PROFILE</button>
+        <button onclick="signout()" style="position: absolute;bottom: 0;right: 0;" class="btn btn-danger mb-4 me-3">LOG OUT</button>
+
+        <!-- <script>
+        var todoList = []
+        var editedIndex = 0
+        if (localStorage.userTodo) {
+            todoList = JSON.parse(localStorage.getItem("userTodo"))
+        } else {
+            todoList = []
+        }
+        function addTodo() {
+            if (todo.value==""||todoDescribe.value==""||todoCategory.value=="") {
+                alert("Fill out all fields")
+            } else {
+                totalList = {
+                    yourTodo : todo.value,
+                    yourTodoCategory : todoCategory.value,
+                    yourTodoDescribe : todoDescribe.value,
+                } ;
+                todoList.push(totalList);
+                console.log(todoList)
+                // localStorage.setItem("userTodo", JSON.stringify(todoList))
+                todo.value = ""
+                todoCategory.value = ""
+                todoDescribe.value = ""
+                disp.innerHTML=""
+                displayList()
+            }
+        }
+        function displayList() {
+            disp.innerHTML=""
+            for (var index = 0; index < todoList.length; index++) {
+                    disp.innerHTML += `
+                    <h3>ToDo : ${todoList[index].yourTodo}</h3>
+                    <h3>ToDo Description : ${todoList[index].yourTodoCategory}</h3>
+                    <h3>ToDo Category : ${todoList[index].yourTodoDescribe}</h3>
+                    <button class="btn btn-danger" onclick="deleteOneList(${index})">Delete</button>
+                    <button class="btn btn-warning" onclick="editList(${index})">Edit</button>
+                    `
+                }
+        }
+        function editList(listIndex) {
+            console.log(listIndex)
+            editedIndex = listIndex
+            updateDiv.style.display ="block"
+            input1.value = todoList[listIndex].yourTodo
+            input2.value = todoList[listIndex].yourTodoCategory
+            input3.value = todoList[listIndex].yourTodoDescribe
+        }
+        function deleteOneList(listIndex) {
+            var confirmDel = confirm("Are you sure you want to delete this ToDo ?")
+            if (confirmDel==true) {
+                todoList.splice(listIndex,1)
+                console.log(todoList)
+                displayList()
+            }
+        }
+        function updateList() {
+            console.log(editedIndex)
+            todoList[editedIndex] = {
+                yourTodo:input1.value,
+                yourTodoCategory:input2.value,
+                yourTodoDescribe:input3.value,
+            };
+            displayList()
+            updateDiv.style.display ="none"
+        }
+        function deleteAllTodo() {
+            var confirmDel = confirm("Are you sure you want to delete this ToDo ?")
+            if (confirmDel==true) {
+                todoList.splice(0)
+                console.log(todoList)
+            }
+            disp.innerHTML = ""
+        }
+        function logOut() {
+                var confirmDel = confirm("Are you sure you want to log out?")
+                if (confirmDel==true) {
+                    location.replace("index.html")
+                }
+            }
+        function checkProfile() {
+            window.location="localProfile.html";
+        }
+        </script> -->
+        
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-auth.js";
+        import { getDatabase, set, ref, onValue } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-database.js";
+        import { getStorage, ref as stRef, uploadBytes, uploadBytesResumable } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-storage.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxovPDBU7LtqyDTKnpaJGrEH1w4l97n0g",
+            authDomain: "firbase-class-55f7d.firebaseapp.com",
+            databaseURL: "https://firbase-class-55f7d-default-rtdb.firebaseio.com",
+            projectId: "firbase-class-55f7d",
+            storageBucket: "firbase-class-55f7d.appspot.com",
+            messagingSenderId: "753705363549",
+            appId: "1:753705363549:web:38a451763b08acf39545b4"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getDatabase();
+        const storage = getStorage();
+
+        let user_id =""
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location="index.html";
+            } else{
+                user_id = user.uid
+            }
+        })
+
+        var todoIndex = 0;
+        var todoArray = [];
+        var editedIndex = 0;
+        var todoRef = ref(db, "todos")
+        onValue(todoRef, (snapshot)=> {
+            todoArray = snapshot.val();
+            if (todoArray) {
+                todoIndex = todoArray.length;
+                displayList(todoArray)
+            } else {
+                todoIndex = 0
+            }
+        })
+
+        function addTodo() {
+            var todo = {
+                userTodo : todoName.value,
+                userTodoDesc : todoDescribe.value,
+                userTodoCategory : todoCategory.value,
+                user_id : user_id
+            };
+            let dbRef = ref(db, `todos/${todoIndex}`)
+            set(dbRef, todo)
+            console.log(todoArray.userTodo)
+
+            let files = fileInp.files[0]
+            let file_name = files.name
+            console.log(files, file_name)
+
+            let fileRef = stRef(storage, `Files/Images${file_name}`);
+            uploadBytes(fileRef, files)
+
+            let uploadFile = uploadBytesResumable(fileRef, files);
+            uploadFile.on("state_changed", function(snapshot){
+                let bytesTransferred = snapshot.bytesTransferred;
+                let totalBytes = snapshot.totalBytes;
+                let total = Math.round((bytesTransferred/totalBytes)* 100);
+                uploading.innerHTML = total + "%"
+                uploading.style.background="orange"
+                console.log(snapshot.bytesTransferred);
+                console.log(snapshot.totalBytes);
+            }, function (error) {
+                console.log(error)
+            }, function () {
+                uploading.innerHTML = "SUCCESSFUL";
+                uploading.style.background ="green";
+            })
+
+            todoName.value = ""
+            todoDescribe.value = ""
+            todoCategory.value = ""
+        }
+
+        function displayList(todoArray) {
+            disp.innerHTML=""
+            for (var index = 0; index < todoArray.length; index++) {
+                if (todoArray[index].user_id == user_id) {
+                    disp.innerHTML += `
+                    <div class="row shadow p-3 mb-4">
+                        <div class="col-12" id="styleIt">ToDo : ${todoArray[index].userTodo}</div>
+                        <div class="col-12" id="styleIt">Description : ${todoArray[index].userTodoDesc}</div>
+                        <div class="col-12" id="styleIt">Category : ${todoArray[index].userTodoCategory}</div>
+                        <div class="col-3"><button class="btn btn-danger" onclick="deleteOneList(${index})">Delete</button></div>
+                        <div class="col-3"><button class="btn btn-warning" onclick="editList(${index})">Edit</button></div>
+                    </div>
+                    `   
+                }
+            }
+        }
+        function editList(listIndex) {
+            console.log(listIndex)
+            editedIndex = listIndex
+            updateDiv.style.display ="block"
+            input1.value = todoArray[listIndex].userTodo
+            input2.value = todoArray[listIndex].userTodoDesc
+            input3.value = todoArray[listIndex].userTodoCategory
+        }
+        // function deleteOneList(listIndex) {
+        //     var confirmDel = confirm("Are you sure you want to delete this ToDo ?")
+        //     if (confirmDel==true) {
+        //         todoArray.splice(listIndex,1)
+        //         console.log(todoArray)
+        //         displayList()
+        //     }
+        // }
+        function updateList() {
+            console.log(editedIndex)
+            todoArray[editedIndex] = {
+                userTodo:input1.value,
+                userTodoDesc:input2.value,
+                userTodoCategory:input3.value,
+                user_id : user_id
+            };
+            let dbRef = ref(db, `todos`)
+            set(dbRef, todoArray)
+            console.log(todoArray.length)
+            updateDiv.style.display ="none"
+        }
+        function deleteOneList(listIndex) {
+            var confirmDel = confirm("Are you sure you want to delete this ToDo ?")
+            if (confirmDel==true) {
+                todoArray.splice(listIndex,1)
+                console.log(todoArray)
+            }
+            let dbRef = ref(db, `todos`)
+            set(dbRef, todoArray)
+            disp.innerHTML = ""
+            displayList(todoArray)
+        }
+        // function deleteAllTodo(listIndex) {
+        //     var confirmAllDel = confirm("Delete all ToDo!!!! ?")
+        //     if (confirmAllDel==true) {
+        //         todoArray.splice(0)
+        //         console.log(todoArray)
+        //     }
+        //     let dbRef = ref(db, `todos`)
+        //     set(dbRef, todoArray)
+        //     disp.innerHTML = ""
+        //     displayList(todoArray)
+        // }
+        function signout() {
+            signOut(auth).then(()=>{
+                console.log(result)
+                window.location="index.html"
+            }).catch((error)=>{
+                console.log(error)
+                alert("Logged Out Successfully")
+            })
+        }
+        function checkProfile() {
+            window.location="localProfile.html"
+        }
+
+
+        window.addTodo = addTodo
+        window.signout=signout;
+        window.editList=editList
+        window.updateList=updateList
+        window.checkProfile=checkProfile
+        // window.deleteAllTodo=deleteAllTodo;
+        window.editList=editList;
+        window.deleteOneList=deleteOneList
+      </script>
+        
+    </body>
+</html>
